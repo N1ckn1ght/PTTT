@@ -2,6 +2,7 @@
 
 Field::Field()
 {
+	turn = Cell::Cross;
 	ptr = new Cell***[3];
 	for (size_t by = 0; by < 3; by++) {
 		ptr[by] = new Cell**[3];
@@ -17,16 +18,45 @@ Field::Field()
 	}
 }
 
-bool Field::insert(size_t bx, size_t by, size_t x, size_t y, Cell elem)
+Field::~Field()
 {
-	if (by > 2 or bx > 2 or y > 2 or x > 2) {
+	for (size_t by = 0; by < 3; by++) {
+		for (size_t bx = 0; bx < 3; bx++) {
+			for (size_t y = 0; y < 3; y++) {
+				delete[] ptr[by][bx][y];
+			}
+			delete[] ptr[by][bx];
+		}
+		delete[] ptr[by];
+	}
+	delete[] ptr;
+}
+
+bool Field::insert(const size_t by, const size_t bx, const size_t y, const size_t x)
+{
+	if (by > 2 || bx > 2 || y > 2 || x > 2 || lastMove.y != -1) {
 		return false;
 	}
-	if (ptr[bx][by][x][y] == Cell::Empty) {
-		ptr[bx][by][x][y] = elem;
-		return true;
+	ptr[by][bx][y][x] = turn;
+	turn = nextCell(turn);
+	lastMove = Coord(y, x);
+	return true;
+}
+
+bool Field::insert(const size_t y, const size_t x)
+{
+	if (y > 2 || x > 2 || ptr[lastMove.y][lastMove.x][y][x] != Cell::Empty) {
+		return false;
 	}
-	return false;
+	ptr[lastMove.y][lastMove.x][y][x] = turn;
+	turn = nextCell(turn);
+	lastMove = Coord(y, x);
+	return true;
+}
+
+Cell Field::get(size_t by, size_t bx, size_t y, size_t x)
+{
+	return ptr[by][bx][y][x];
 }
 
 Cell Field::adjucate()
@@ -78,6 +108,50 @@ bool Field::adjucateFor(size_t by, size_t bx, Cell elem, size_t additionalMoves)
 		return true;
 	}
 	return false;
+}
+
+Cell Field::getTurn()
+{
+	return turn;
+}
+
+Coord Field::getLastMove()
+{
+	return lastMove;
+}
+
+Field Field::makeCopy()
+{
+	Field field_;
+
+	for (size_t by = 0; by < 3; by++) {
+		for (size_t bx = 0; bx < 3; bx++) {
+			for (size_t y = 0; y < 3; y++) {
+				for (size_t x = 0; x < 3; x++) {
+					field_.set(by, bx, y, x, ptr[by][bx][y][x]);
+				}
+			}
+		}
+	}
+	field_.setTurn(turn);
+	field_.setLastMove(lastMove);
+
+	return field_;
+}
+
+void Field::set(const size_t by, const size_t bx, const size_t y, const size_t x, const Cell elem)
+{
+	ptr[by][bx][y][x] = elem;
+}
+
+void Field::setTurn(Cell cell)
+{
+	turn = cell;
+}
+
+void Field::setLastMove(Coord coord)
+{
+	lastMove = coord;
 }
 
 std::ostream& operator<<(std::ostream& out, const Field& field)
