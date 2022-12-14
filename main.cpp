@@ -105,9 +105,23 @@ void playerVsBot(Field& field, Eurist& eurist, bool playerMovesFirst) {
 
 int main(int argc, wchar_t* argv[]) {
 	srand(time(0));
-
 	Field field;
 	Eurist eurist(20000);
-	// playerVsPlayer(field);
-	playerVsBot(field, eurist, false);
+
+	cout << "Please, select a gamemode;\n1 - Two players\n2 - Play VS Eurist bot as CROSS\n3 - Play VS Eurist Bot as NULLS\n\n";
+	char input = '0';
+	do {
+		cin >> input;
+	} while (input < '1' or input > '3');
+	system("CLS");
+
+	if (input == '1') {
+		playerVsPlayer(field);
+	}
+	else if (input == '2') {
+		playerVsBot(field, eurist, true);
+	}
+	else if (input == '3') {
+		playerVsBot(field, eurist, false);
+	}
 }

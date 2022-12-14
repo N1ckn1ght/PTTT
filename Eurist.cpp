@@ -93,8 +93,8 @@ void Eurist::makeFirstMove(Field& field, size_t k)
 	}
 
 	// Little debug info:
-	std::cout << "Eurist: I've counted from 81 legal moves, " << fraction << " random lines for each;\n";
-	std::cout << "Eurist: Total random non-unique moves analyzed: " << moves << ".\n";
+	std::cout << "Eurist: I've evaluated 81 legal moves, " << fraction << " random lines for each;\n";
+	std::cout << "Eurist: Total random non-unique moves made: " << moves << ".\n";
 	float maxc = -1.0;
 	size_t maxi = 0, maxby = 0, maxbx = 0;
 	for (size_t by = 0; by < 3; by++) {
@@ -198,8 +198,8 @@ void Eurist::makeMove(Field& field)
 	}
 
 	// Little debug info:
-	std::cout << "Eurist: I've counted from " << count[by][bx] << " legal moves, " << fraction << " random lines for each;\n";
-	std::cout << "Eurist: Total random non-unique moves analyzed: " << moves << ".\n";
+	std::cout << "Eurist: I've evaluated " << count[by][bx] << " legal moves, " << fraction << " random lines for each;\n";
+	std::cout << "Eurist: Total random non-unique moves made: " << moves << ".\n";
 	float maxc = -1.0;
 	size_t maxi = 0;
 	for (size_t i = 0; i < count[by][bx]; i++) {
@@ -216,6 +216,7 @@ void Eurist::makeMove(Field& field)
 
 void Eurist::clear()
 {
+	moves = 0;
 	if (ratios) {
 		for (size_t by = 0; by < 3; by++) {
 			for (size_t bx = 0; bx < 3; bx++) {
