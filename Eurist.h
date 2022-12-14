@@ -25,7 +25,8 @@ public:
 	~Eurist();
 	
 	// Call this in case of bot playing cross hence making the first move
-	void makeFirstMove(Field& field);
+	// k is the multiplier for lines analyzed, there're 9 times more possibilities for the first move
+	void makeFirstMove(Field& field, size_t k = 1);
 	// Call this in case of bot making any move but the first one
 	void makeMove(Field& field);
 };

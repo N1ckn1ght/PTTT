@@ -59,11 +59,11 @@ Cell Field::get(size_t by, size_t bx, size_t y, size_t x)
 	return ptr[by][bx][y][x];
 }
 
-Cell Field::adjucate()
+Cell Field::adjudicate()
 {
 	for (size_t by = 0; by < 3; by++) {
 		for (size_t bx = 0; bx < 3; bx++) {
-			Cell winner = adjucate(by, bx);
+			Cell winner = adjudicate(by, bx);
 			if (winner != Cell::Empty) {
 				return winner;
 			}
@@ -72,7 +72,7 @@ Cell Field::adjucate()
 	return Cell::Empty;
 }
 
-Cell Field::adjucate(size_t by, size_t bx)
+Cell Field::adjudicate(size_t by, size_t bx)
 {
 	for (size_t i = 0; i < 3; i++) {
 		if (ptr[by][bx][i][0] != Cell::Empty && ptr[by][bx][i][0] == ptr[by][bx][i][1] && ptr[by][bx][i][0] == ptr[by][bx][i][2]) {
@@ -91,7 +91,7 @@ Cell Field::adjucate(size_t by, size_t bx)
 	return Cell::Empty;
 }
 
-bool Field::adjucateFor(size_t by, size_t bx, Cell elem, size_t additionalMoves)
+bool Field::adjudicateFor(size_t by, size_t bx, Cell elem, size_t additionalMoves)
 {
 	for (size_t i = 0; i < 3; i++) {
 		if ((ptr[by][bx][i][0] == elem) + (ptr[by][bx][i][1] == elem) + (ptr[by][bx][i][2] == elem) > 2 - additionalMoves) {

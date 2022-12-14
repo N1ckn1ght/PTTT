@@ -22,12 +22,12 @@ public:
 	bool insert(const size_t y, const size_t x);
 	// This method has no protection from illegal (any > 2) values
 	Cell get(const size_t by, const size_t bx, const size_t y, const size_t x);
-	// Will call the next adjucate(by, bx) method until victor will be found
-	Cell adjucate();
+	// Will call the next adjudicate(by, bx) method until victor will be found
+	Cell adjudicate();
 	// Will return victor of the 3x3 board or Cell::Empty
-	Cell adjucate(const size_t by, const size_t bx);
+	Cell adjudicate(const size_t by, const size_t bx);
 	// With additionalMoves = 1 will return true if certain elem is just 1 move from victory
-	bool adjucateFor(const size_t by, const size_t bx, const Cell elem, const size_t additionalMoves = 0);
+	bool adjudicateFor(const size_t by, const size_t bx, const Cell elem, const size_t additionalMoves = 0);
 
 	Cell getTurn();
 	Coord getLastMove();
