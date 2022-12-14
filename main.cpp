@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include "Field.h"
 #include "Eurist.h"
 
@@ -55,7 +56,7 @@ void playerVsBot(Field& field, Eurist& eurist, bool playerMovesFirst) {
 		firstMoveByPlayer(field);
 	}
 	else {
-		// TODO: bot first move
+		eurist.makeFirstMove(field);
 	}
 
 	while (true) {
@@ -80,15 +81,33 @@ void playerVsBot(Field& field, Eurist& eurist, bool playerMovesFirst) {
 			}
 		}
 		else {
-			// pass
+			cout << field << "NULLS turn on " << field.getLastMove().y << ", " << field.getLastMove().x << " board!\n";
+			success = false;
+			do {
+				cout << "Input: {Y (0-2)} {X (0-2)} from top-left.\n";
+				cin >> y >> x;
+				success = field.insert(y, x);
+			} while (!success);
+			if (field.adjucate() == Cell::Null) {
+				cout << field << "NULLS won this game. Well done!\n";
+				return;
+			}
+
+			cout << field << "CROSS turn on " << field.getLastMove().y << ", " << field.getLastMove().x << " board!\n";
+			eurist.makeMove(field);
+			if (field.adjucate() == Cell::Cross) {
+				cout << field << "Eurist won this game with CROSS.\nThank you for trying!\n";
+				return;
+			}
 		}
 	}
 }
 
 int main(int argc, wchar_t* argv[]) {
+	srand(time(0));
 
 	Field field;
-	Eurist eurist(1000);
+	Eurist eurist(20000);
 	// playerVsPlayer(field);
-	playerVsBot(field, eurist, true);
+	playerVsBot(field, eurist, false);
 }

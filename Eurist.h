@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdlib>
 #include "Field.h"
 #include "Ratio.h"
 #include "Coord.h"
@@ -24,7 +25,7 @@ public:
 	~Eurist();
 	
 	// Call this in case of bot playing cross hence making the first move
-	Coord makeFirstMove(Field& field);
+	void makeFirstMove(Field& field);
 	// Call this in case of bot making any move but the first one
-	Coord makeMove(Field& field);
+	void makeMove(Field& field);
 };

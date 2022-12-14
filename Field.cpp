@@ -75,17 +75,17 @@ Cell Field::adjucate()
 Cell Field::adjucate(size_t by, size_t bx)
 {
 	for (size_t i = 0; i < 3; i++) {
-		if (ptr[by][bx][i][0] == ptr[by][bx][i][1] && ptr[by][bx][i][0] == ptr[by][bx][i][2]) {
+		if (ptr[by][bx][i][0] != Cell::Empty && ptr[by][bx][i][0] == ptr[by][bx][i][1] && ptr[by][bx][i][0] == ptr[by][bx][i][2]) {
 			return ptr[by][bx][i][0];
 		}
-		if (ptr[by][bx][0][i] == ptr[by][bx][1][i] && ptr[by][bx][0][i] == ptr[by][bx][2][i]) {
+		if (ptr[by][bx][0][i] != Cell::Empty && ptr[by][bx][0][i] == ptr[by][bx][1][i] && ptr[by][bx][0][i] == ptr[by][bx][2][i]) {
 			return ptr[by][bx][0][i];
 		}
 	}
-	if (ptr[by][bx][0][0] == ptr[by][bx][1][1] && ptr[by][bx][0][0] == ptr[by][bx][2][2]) {
+	if (ptr[by][bx][0][0] != Cell::Empty && ptr[by][bx][0][0] == ptr[by][bx][1][1] && ptr[by][bx][0][0] == ptr[by][bx][2][2]) {
 		return ptr[by][bx][0][0];
 	}
-	if (ptr[by][bx][0][2] == ptr[by][bx][1][1] && ptr[by][bx][0][2] == ptr[by][bx][2][0]) {
+	if (ptr[by][bx][0][2] != Cell::Empty && ptr[by][bx][0][2] == ptr[by][bx][1][1] && ptr[by][bx][0][2] == ptr[by][bx][2][0]) {
 		return ptr[by][bx][0][2];
 	}
 	return Cell::Empty;
@@ -118,25 +118,6 @@ Cell Field::getTurn()
 Coord Field::getLastMove()
 {
 	return lastMove;
-}
-
-Field Field::makeCopy()
-{
-	Field field_;
-
-	for (size_t by = 0; by < 3; by++) {
-		for (size_t bx = 0; bx < 3; bx++) {
-			for (size_t y = 0; y < 3; y++) {
-				for (size_t x = 0; x < 3; x++) {
-					field_.set(by, bx, y, x, ptr[by][bx][y][x]);
-				}
-			}
-		}
-	}
-	field_.setTurn(turn);
-	field_.setLastMove(lastMove);
-
-	return field_;
 }
 
 void Field::set(const size_t by, const size_t bx, const size_t y, const size_t x, const Cell elem)

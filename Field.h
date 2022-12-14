@@ -32,7 +32,6 @@ public:
 	Cell getTurn();
 	Coord getLastMove();
 
-	Field makeCopy();
 	// This method has no protection from illegal (any > 2) values or moves; doesn't modify turn or lastMove
 	void set(const size_t by, const size_t bx, const size_t y, const size_t x, const Cell elem);
 	// Don't call this if you didn't use set previously
