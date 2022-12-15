@@ -107,7 +107,7 @@ void playerVsBot(Field& field, Eurist& eurist, bool playerMovesFirst) {
 			euristMakeMove(field, eurist);
 
 			if (field.adjudicate() == Cell::Null) {
-				cout << field << "NULLS won this game. GG!\n";
+				cout << field << "Eurist won this game with NULLS. Such a divine intellect!\n";
 				return;
 			}
 			if (field.adjudicate() == Cell::Any) {
@@ -124,7 +124,7 @@ void playerVsBot(Field& field, Eurist& eurist, bool playerMovesFirst) {
 			} while (!success);
 
 			if (field.adjudicate() == Cell::Cross) {
-				cout << field << "CROSS won this game. GG!\n";
+				cout << field << "Player won this game with CROSS. Thank you for playing!\n";
 				return;
 			}
 			if (field.adjudicate() == Cell::Any) {

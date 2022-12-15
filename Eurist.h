@@ -33,14 +33,6 @@ public:
 	Eurist(size_t lines_, float k_, bool debug_ = false);
 	~Eurist();
 	
+	// Returns sorted vector of possible moves in format (by, bx, y, x, winning chance [0-1])
 	std::vector <EuristMove> eval(Field& field);
-
-	// Call this in case of bot playing cross hence making the first move
-	// k is the multiplier for lines analyzed, there're 9 times more possibilities for the first move
-	
-	//void makeFirstMove(Field& field, size_t k = 1);
-	
-	// Call this in case of bot making any move but the first one
-	
-	//void makeMove(Field& field);
 };
