@@ -103,16 +103,8 @@ void playerVsBot(Field& field, Eurist& eurist, bool playerMovesFirst) {
 
 	while (true) {
 		if (playerMovesFirst) {
-			// pass
-		}
-		else {
 			cout << field << "\nNULLS turn on " << field.getLastMove().x << ", " << field.getLastMove().y << " board!\n";
-			success = false;
-			do {
-				cout << "Input: {X (0-2)} {Y (0-2)} from left-top.\n\n";
-				cin >> x >> y;
-				success = field.insert(y, x);
-			} while (!success);
+			euristMakeMove(field, eurist);
 
 			if (field.adjudicate() == Cell::Null) {
 				cout << field << "NULLS won this game. GG!\n";
@@ -124,7 +116,13 @@ void playerVsBot(Field& field, Eurist& eurist, bool playerMovesFirst) {
 			}
 
 			cout << field << "\nCROSS turn on " << field.getLastMove().x << ", " << field.getLastMove().y << " board!\n";
-			euristMakeMove(field, eurist);
+			success = false;
+			do {
+				cout << "Input: {X (0-2)} {Y (0-2)} from left-top.\n\n";
+				cin >> x >> y;
+				success = field.insert(y, x);
+			} while (!success);
+
 			if (field.adjudicate() == Cell::Cross) {
 				cout << field << "CROSS won this game. GG!\n";
 				return;
@@ -134,22 +132,35 @@ void playerVsBot(Field& field, Eurist& eurist, bool playerMovesFirst) {
 				return;
 			}
 		}
+		else {
+			cout << field << "\nNULLS turn on " << field.getLastMove().x << ", " << field.getLastMove().y << " board!\n";
+			success = false;
+			do {
+				cout << "Input: {X (0-2)} {Y (0-2)} from left-top.\n\n";
+				cin >> x >> y;
+				success = field.insert(y, x);
+			} while (!success);
 
-		cout << field << "\nCROSS turn on " << field.getLastMove().x << ", " << field.getLastMove().y << " board!\n";
-		success = false;
-		do {
-			cout << "Input: {X (0-2)} {Y (0-2)} from left-top.\n\n";
-			cin >> x >> y;
-			success = field.insert(y, x);
-		} while (!success);
+			if (field.adjudicate() == Cell::Null) {
+				cout << field << "Player won this game with NULLS. Well done!\n";
+				return;
+			}
+			if (field.adjudicate() == Cell::Any) {
+				cout << field << "Round draw. Fantastic!\n";
+				return;
+			}
 
-		if (field.adjudicate() == Cell::Cross) {
-			cout << field << "CROSS won this game. GG!\n";
-			return;
-		}
-		if (field.adjudicate() == Cell::Any) {
-			cout << field << "Round draw. Fantastic!\n";
-			return;
+			cout << field << "\nCROSS turn on " << field.getLastMove().x << ", " << field.getLastMove().y << " board!\n";
+			euristMakeMove(field, eurist);
+
+			if (field.adjudicate() == Cell::Cross) {
+				cout << field << "Eurist won this game with CROSS. No chances for humanity!\n";
+				return;
+			}
+			if (field.adjudicate() == Cell::Any) {
+				cout << field << "Round draw. Fantastic!\n";
+				return;
+			}
 		}
 	}
 }
@@ -161,9 +172,11 @@ int main(int argc, wchar_t* argv[]) {
 
 	char input = '0';
 	do {
-		cout << "Please, select a gamemode;\n1 - Two players\n2 - Two players with Eurist analysis\n3 - Play VS Eurist bot as CROSS\n4 - Play VS Eurist Bot as NULLS\n\n";
+		cout << "Please, select a gamemode\n\n1 - Two players\n2 - Two players with Eurist analysis\n";
+		cout << "3 - Play Vs Eurist Bot as CROSS\n4 - Play Vs Eurist Bot as NULLS\n";
+		cout << "5 - Play Vs Eurist Bot as CROSS with custom params\n6 - Play Vs Eurist Bot as NULLS with custom params\n\n";
 		cin >> input;
-	} while (input < '1' or input > '4');
+	} while (input < '1' or input > '6');
 	system("CLS");
 
 	if (input == '1') {
@@ -178,4 +191,24 @@ int main(int argc, wchar_t* argv[]) {
 	else if (input == '4') {
 		playerVsBot(field, eurist, false);
 	}
+
+	else if (input == '5') {
+		size_t lines;
+		float k;
+		bool debug;
+		cout << "Input (unsigned int) lines, (Float) k, (bool) debug:\n\n";
+		cin >> lines >> k >> debug;
+		Eurist eurist(lines, k, debug);
+		playerVsBot(field, eurist, true);
+	}
+	else if (input == '6') {
+		size_t lines;
+		float k;
+		bool debug;
+		cout << "Input (unsigned int) lines, (Float) k, (bool) debug:\n\n";
+		cin >> lines >> k >> debug;
+		Eurist eurist(lines, k, debug);
+		playerVsBot(field, eurist, false);
+	}
+
 }
