@@ -34,11 +34,15 @@ Field::~Field()
 
 bool Field::insert(const size_t by, const size_t bx, const size_t y, const size_t x)
 {
-	if (by > 2 || bx > 2 || y > 2 || x > 2 || lastMove.y != -1) {
+	if (by > 2 || bx > 2 || y > 2 || x > 2) {
+		return false;
+	}
+	if (lastMove.y != -1 && by != lastMove.y && bx != lastMove.x) {
 		return false;
 	}
 	ptr[by][bx][y][x] = turn;
 	turn = nextCell(turn);
+	lastBoard = Coord(by, bx);
 	lastMove = Coord(y, x);
 	return true;
 }
@@ -50,6 +54,7 @@ bool Field::insert(const size_t y, const size_t x)
 	}
 	ptr[lastMove.y][lastMove.x][y][x] = turn;
 	turn = nextCell(turn);
+	lastBoard = Coord(lastMove.y, lastMove.x);
 	lastMove = Coord(y, x);
 	return true;
 }
@@ -61,19 +66,13 @@ Cell Field::get(size_t by, size_t bx, size_t y, size_t x)
 
 Cell Field::adjudicate()
 {
-	for (size_t by = 0; by < 3; by++) {
-		for (size_t bx = 0; bx < 3; bx++) {
-			Cell winner = adjudicate(by, bx);
-			if (winner != Cell::Empty) {
-				return winner;
-			}
-		}
+	if (lastMove.y == -1) {
+		return Cell::Empty;
 	}
-	return Cell::Empty;
-}
 
-Cell Field::adjudicate(size_t by, size_t bx)
-{
+	size_t by = lastBoard.y;
+	size_t bx = lastBoard.x;
+
 	for (size_t i = 0; i < 3; i++) {
 		if (ptr[by][bx][i][0] != Cell::Empty && ptr[by][bx][i][0] == ptr[by][bx][i][1] && ptr[by][bx][i][0] == ptr[by][bx][i][2]) {
 			return ptr[by][bx][i][0];
@@ -88,26 +87,23 @@ Cell Field::adjudicate(size_t by, size_t bx)
 	if (ptr[by][bx][0][2] != Cell::Empty && ptr[by][bx][0][2] == ptr[by][bx][1][1] && ptr[by][bx][0][2] == ptr[by][bx][2][0]) {
 		return ptr[by][bx][0][2];
 	}
-	return Cell::Empty;
-}
 
-bool Field::adjudicateFor(size_t by, size_t bx, Cell elem, size_t additionalMoves)
-{
+	size_t movesLeft = 9;
+	by = lastMove.y;
+	bx = lastMove.x;
+
 	for (size_t i = 0; i < 3; i++) {
-		if ((ptr[by][bx][i][0] == elem) + (ptr[by][bx][i][1] == elem) + (ptr[by][bx][i][2] == elem) > 2 - additionalMoves) {
-			return true;
+		for (size_t j = 0; j < 3; j++) {
+			if (ptr[by][bx][i][j] != Cell::Empty) {
+				movesLeft--;
+			}
 		}
-		if ((ptr[by][bx][0][i] == elem) + (ptr[by][bx][1][i] == elem) + (ptr[by][bx][2][i] == elem) > 2 - additionalMoves) {
-			return true;
-		}
 	}
-	if ((ptr[by][bx][0][0] == elem) + (ptr[by][bx][1][1] == elem) + (ptr[by][bx][2][2] == elem) > 2 - additionalMoves) {
-		return true;
+
+	if (movesLeft) {
+		return Cell::Empty;
 	}
-	if ((ptr[by][bx][0][2] == elem) + (ptr[by][bx][1][1] == elem) + (ptr[by][bx][2][0] == elem) > 2 - additionalMoves) {
-		return true;
-	}
-	return false;
+	return Cell::Any;
 }
 
 Cell Field::getTurn()
@@ -138,7 +134,11 @@ void Field::setLastMove(Coord coord)
 std::ostream& operator<<(std::ostream& out, const Field& field)
 {
 	for (size_t by = 0; by < 3; by++) {
-		out << " _ _ _    _ _ _    _ _ _\n";
+		out << " _ _ _   _ _ _   _ _ _";
+		if (by == 0) {
+			out << "  Y";
+		}
+		out << "\n";
 		for (size_t y = 0; y < 3; y++) {
 			for (size_t bx = 0; bx < 3; bx++) {
 				out << "|";
@@ -162,13 +162,14 @@ std::ostream& operator<<(std::ostream& out, const Field& field)
 					}
 				}
 				out << "| ";
-				if (bx < 2) {
-					out << " ";
-				}
+				if (bx == 2) {
+					out << y;
+				} 
 			}
 			out << "\n";
 		}
-		out << " - - -    - - -    - - -\n";
+		out << " - - -   - - -   - - -\n";
 	}
+	out << " 0 1 2   0 1 2   0 1 2  X\n";
 	return out;
 }
