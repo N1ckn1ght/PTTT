@@ -10,24 +10,23 @@ private:
 
 	// Which turn it is
 	Cell turn;
+	// Last move by (by, bx)
+	Coord lastBoard;
 	// Last move by (y, x)
 	Coord lastMove;
 public:
 	Field();
 	~Field();
 
-	// This method has protection and can be used at first move only
-	bool insert(const size_t by, const size_t bx, const size_t y, const size_t x);
 	// This method has protection and will return false on failure or it will place CROSS or NULL accordingly to its Cell turn
+	bool insert(const size_t by, const size_t bx, const size_t y, const size_t x);
+	// This method can be called if (by, bx) are deterministic
 	bool insert(const size_t y, const size_t x);
 	// This method has no protection from illegal (any > 2) values
 	Cell get(const size_t by, const size_t bx, const size_t y, const size_t x);
-	// Will call the next adjudicate(by, bx) method until victor will be found
+	// Will check lastBoard and determine winner by it, or draw by lastMove
+	// Will return winner, or Cell::Any on draw, or Cell::Empty
 	Cell adjudicate();
-	// Will return victor of the 3x3 board or Cell::Empty
-	Cell adjudicate(const size_t by, const size_t bx);
-	// With additionalMoves = 1 will return true if certain elem is just 1 move from victory
-	bool adjudicateFor(const size_t by, const size_t bx, const Cell elem, const size_t additionalMoves = 0);
 
 	Cell getTurn();
 	Coord getLastMove();

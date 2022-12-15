@@ -6,16 +6,25 @@ Ratio::Ratio()
 	amount = 0;
 }
 
-void Ratio::addResult(bool isWinning)
+void Ratio::addResult(const Result& result)
 {
-	sum += isWinning;
+	switch (result) {
+		case Result::Win:
+			sum += 1;
+			break;
+		case Result::Draw:
+			sum += 0.5;
+			break;
+		default:
+			break;
+	}
 	amount++;
 }
 
 float Ratio::getChance()
 {
 	if (amount) {
-		return float(sum) / float(amount);
+		return sum / float(amount);
 	}
 	return 0.5;
 }
