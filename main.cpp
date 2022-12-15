@@ -211,4 +211,7 @@ int main(int argc, wchar_t* argv[]) {
 		playerVsBot(field, eurist, false);
 	}
 
+	cout << "\nInput any symbol to kill this app.\n";
+	cin.get();
+	cin.get();
 }
