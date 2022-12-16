@@ -1,5 +1,9 @@
 # Pointer* Tic-Tac-Toe
 
+Please, consider playing Ultimate Tic-Tac-Toe instead: 
+
+https://github.com/N1ckn1ght/UTTT
+
 Difference from Ultimate Tic-Tac-Toe rules - first who makes single winning board, wins the whole game.
 
 ### Example of the first move
